@@ -1,0 +1,1 @@
+It's not a text editor that I use for myself. Just for brushing up my C skills. 
