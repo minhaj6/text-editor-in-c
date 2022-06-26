@@ -22,6 +22,13 @@ struct editorConfig E;
 /* AND key with 00011111 for stripping upper bits */
 #define VERSION "0.0.1"
 
+enum editorKey {
+  ARROW_LEFT = 'h',
+  ARROW_RIGHT = 'l',
+  ARROW_UP = 'k',
+  ARROW_DOWN = 'j'
+};
+
 /*** terminal ***/
 
 void die(const char* s) {
@@ -79,6 +86,26 @@ char editorReadKey() {
     if (nread == -1 && errno != EAGAIN) {
       die("read");
     }
+  }
+  
+  if (c == '\x1b') {
+    char seq[3];
+
+    if (read(STDIN_FILENO, &seq[0], 1) != 1) return '\x1b';
+    if (read(STDIN_FILENO, &seq[1], 1) != 1) return '\x1b';
+
+    if (seq[0] == '[') {
+      switch (seq[1]) {
+        case 'A': return ARROW_UP;
+        case 'B': return ARROW_DOWN;
+        case 'C': return ARROW_RIGHT;
+        case 'D': return ARROW_LEFT;
+      }
+      return '\x1b';
+    } else {
+      return c;
+    }
+
   }
   return c;
 }
@@ -164,16 +191,16 @@ void initEditor() {
 
 void editorMoveCursor(char key) {
   switch (key) {
-    case 'l':
+    case  ARROW_RIGHT:
       E.cx++;
       break;
-    case 'k':
+    case ARROW_UP:
       E.cy--;
       break;
-    case 'h':
+    case ARROW_LEFT:
       E.cx--;
       break;
-    case 'j':
+    case ARROW_DOWN:
       E.cy++;
       break;
   }
@@ -190,10 +217,10 @@ void editorProcessKeypress() {
       exit(0);
       break;
 
-    case 'h':
-    case 'j':
-    case 'k':
-    case 'l':
+    case ARROW_LEFT:
+    case ARROW_DOWN:
+    case ARROW_UP:
+    case ARROW_RIGHT:
       editorMoveCursor(c);
       break;
 
