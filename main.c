@@ -23,10 +23,10 @@ struct editorConfig E;
 #define VERSION "0.0.1"
 
 enum editorKey {
-  ARROW_LEFT = 'h',
-  ARROW_RIGHT = 'l',
-  ARROW_UP = 'k',
-  ARROW_DOWN = 'j'
+  ARROW_LEFT = 1000,
+  ARROW_RIGHT,
+  ARROW_UP,
+  ARROW_DOWN
 };
 
 /*** terminal ***/
@@ -79,9 +79,9 @@ void enableRawMode() {
     die("tcsetattr");
 }
 
-char editorReadKey() {
+int editorReadKey() {
   int nread;
-  char c;
+  int c;
   while ((nread = read(STDIN_FILENO, &c, 1)) != 1) {
     if (nread == -1 && errno != EAGAIN) {
       die("read");
@@ -189,7 +189,7 @@ void initEditor() {
   printf("row: %d, col: %d \r\n", E.screenrows, E.screencols);
 }
 
-void editorMoveCursor(char key) {
+void editorMoveCursor(int key) {
   switch (key) {
     case  ARROW_RIGHT:
       E.cx++;
@@ -207,7 +207,7 @@ void editorMoveCursor(char key) {
 }
 
 void editorProcessKeypress() {
-  char c = editorReadKey();
+  int c = editorReadKey();
 
   switch (c) {
     case CTRL_KEY('q'):
