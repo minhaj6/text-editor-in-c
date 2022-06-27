@@ -30,7 +30,8 @@ enum editorKey {
   PAGE_UP,
   PAGE_DOWN,
   HOME_KEY,
-  END_KEY
+  END_KEY,
+  DEL_KEY
 };
 
 /*** terminal ***/
@@ -95,7 +96,7 @@ int editorReadKey() {
   /* Page Up is sent as <esc>[5~ and Page Down is sent as <esc>[6~.
   The Home key could be sent as <esc>[1~, <esc>[7~, <esc>[H, or <esc>OH.
   Similarly, the End key could be sent as <esc>[4~, <esc>[8~, <esc>[F, or
-  <esc>OF. Let’s handle all of these cases.
+  <esc>OF. Let’s handle all of these cases. DEL key = <esc>[3~
    */
   if (c == '\x1b') {
     char seq[3];
@@ -111,34 +112,23 @@ int editorReadKey() {
           return '\x1b';
         if (seq[2] == '~') {
           switch (seq[1]) {
-            case '1':
-              return HOME_KEY;
-            case '4':
-              return END_KEY;
-            case '5':
-              return PAGE_UP;
-            case '6':
-              return PAGE_DOWN;
-            case '7':
-              return HOME_KEY;
-            case '8':
-              return END_KEY;
+            case '1': return HOME_KEY;
+            case '3': return DEL_KEY;
+            case '4': return END_KEY;
+            case '5': return PAGE_UP;
+            case '6': return PAGE_DOWN;
+            case '7': return HOME_KEY;
+            case '8': return END_KEY;
           }
         }
       } else {
         switch (seq[1]) {
-          case 'A':
-            return ARROW_UP;
-          case 'B':
-            return ARROW_DOWN;
-          case 'C':
-            return ARROW_RIGHT;
-          case 'D':
-            return ARROW_LEFT;
-          case 'H':
-            return HOME_KEY;
-          case 'F':
-            return END_KEY;
+          case 'A': return ARROW_UP;
+          case 'B': return ARROW_DOWN;
+          case 'C': return ARROW_RIGHT;
+          case 'D': return ARROW_LEFT;
+          case 'H': return HOME_KEY;
+          case 'F': return END_KEY;
         }
       } 
     } else if (seq[0] == 'O') {
