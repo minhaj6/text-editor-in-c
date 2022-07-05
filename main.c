@@ -22,6 +22,7 @@ typedef struct erow {
 struct editorConfig {
   int cx, cy; /* cursor position */
   int rowoff;    /* vertical scrolling */
+  int coloff;    /* horizontal scrolling */
   int screenrows;
   int screencols;
   int numrows;
@@ -281,6 +282,7 @@ void initEditor() {
   E.cx = 0;
   E.cy = 0;
   E.rowoff = 0;
+  E.coloff = 0;
   E.numrows = 0;
   E.row = NULL;
   if (getWindowSize(&E.screenrows, &E.screencols) == -1)
