@@ -21,12 +21,12 @@ typedef struct erow {
 // saving original version of terminal attributes
 struct editorConfig {
   int cx, cy; /* cursor position */
-  int rowoff;    /* vertical scrolling */
-  int coloff;    /* horizontal scrolling */
+  int rowoff; /* vertical scrolling */
+  int coloff; /* horizontal scrolling */
   int screenrows;
   int screencols;
   int numrows;
-  erow *row;
+  erow* row;
   struct termios orig_termios;
 };
 
@@ -216,8 +216,8 @@ int getWindowSize(int* rows, int* cols) {
 }
 
 /******* ROW OPERATION *********/
-void editorAppendRow(char *s, size_t len) {
-  E.row = realloc(E.row, sizeof(erow) * (E.numrows+1));
+void editorAppendRow(char* s, size_t len) {
+  E.row = realloc(E.row, sizeof(erow) * (E.numrows + 1));
   int at = E.numrows;
 
   E.row[at].size = len;

@@ -1,7 +1,17 @@
-on: push
+name: text editor build
+
+on: 
+  push: 
+    branches: [ main ]
+  pull_request: 
+    branches: [ main ]
+
 jobs:
-  first-job:
+  build-job:
     runs-on: macos-latest
     
     steps:
-      - run: cc --version
+      - uses: actions/checkout@v2
+      
+      - name: make
+        run: make
